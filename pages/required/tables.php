@@ -13,6 +13,10 @@
 			array (
 				'laballocations' => 'allocationid, day, date_start, date_end, slot, coursecode, batchno, academicyear, labid'
 			),
+		4 => 
+			array (
+				'software_requirements' => 'id, software_req, status'
+			),
 
 		);
 		

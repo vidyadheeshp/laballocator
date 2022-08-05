@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 04, 2022 at 01:23 PM
+-- Generation Time: Aug 05, 2022 at 12:23 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 7.4.28
 
@@ -40,7 +40,8 @@ CREATE TABLE `academic_year` (
 --
 
 INSERT INTO `academic_year` (`id`, `from_date`, `to_date`, `aca_year`, `status`) VALUES
-(1, '2022-06-01', '2022-07-30', '2022-2023', 1);
+(1, '2022-06-01', '2022-07-30', '2022-2023', 1),
+(2, '2022-08-01', '2022-08-31', '2022-2023', 1);
 
 -- --------------------------------------------------------
 
@@ -1037,6 +1038,29 @@ INSERT INTO `slot_list` (`slot_id`, `slot_time`, `duration`, `status`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `software_requirements`
+--
+
+CREATE TABLE `software_requirements` (
+  `id` int(11) NOT NULL,
+  `software_req` varchar(60) NOT NULL,
+  `status` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `software_requirements`
+--
+
+INSERT INTO `software_requirements` (`id`, `software_req`, `status`) VALUES
+(1, 'Android Studio', 1),
+(2, 'Android Studio', 1),
+(3, 'Linux Kali machines', 1),
+(4, 'Spark Studio', 1),
+(5, 'Linux Kali machines', 1);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
@@ -1131,6 +1155,12 @@ ALTER TABLE `slot_list`
   ADD PRIMARY KEY (`slot_id`);
 
 --
+-- Indexes for table `software_requirements`
+--
+ALTER TABLE `software_requirements`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
@@ -1150,7 +1180,7 @@ ALTER TABLE `user_type`
 -- AUTO_INCREMENT for table `academic_year`
 --
 ALTER TABLE `academic_year`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `courses`
@@ -1181,6 +1211,12 @@ ALTER TABLE `slotbooking`
 --
 ALTER TABLE `slot_list`
   MODIFY `slot_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
+-- AUTO_INCREMENT for table `software_requirements`
+--
+ALTER TABLE `software_requirements`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `users`

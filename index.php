@@ -301,6 +301,48 @@ include('pages/required/tables.php');
 			              <h3 class="box-title">Lab Allocations Initiation</h3>
 			            </div>
 			            <div class="box-body">
+			            			
+			            			<table class="table table-bordered table-responsive">
+			            				<caption>Previous Academic Year List</caption>
+															<thead>
+																	<tr>
+																		<th>Academic Year</th>
+																		<th>Start Time</th>
+																		<th>End Time</th>
+																	</tr>
+															</thead>
+															<tbody>
+															<?php 
+																		$aca_year_list = "SELECT *,
+																												DATE_FORMAT(from_date,'%d %M %Y') AS frm_date,
+						           																	DATE_FORMAT(to_date,'%d %M %Y') AS t_date
+						           															  FROM academic_year 
+						           															  WHERE 
+						           															  	1=1";
+						            				$aca_list = db_all($aca_year_list);
+						            				$aca_str = '';
+						            				if(empty($aca_list)){
+						            					$aca_str .= "<tr>
+																							<td colspan='3'>No recent Academic Year (Closed)</td>
+																						</tr>";
+																					}else{
+																								foreach($aca_list AS $aca){
+						            				$aca_str .= "<tr>
+																							<td>".$aca['aca_year']."</td>
+																							<td>".$aca['frm_date']."</td>
+																							<td>".$aca['t_date']."</td>
+																						</tr>";
+						            			}
+																					}
+						            		
+						            			echo $aca_str;
+						            			?>
+															</tbody>
+																
+														</table>
+												
+
+												<!-- The logic for setting the academic calender button-->
 			           					<?php 
 			           							$query_to_check_requisitions_open = "SELECT *,
 			           																												DATE_FORMAT(from_date,'%d %M %Y') AS frm_date,
@@ -373,68 +415,71 @@ include('pages/required/tables.php');
 			            <div class="box-header with-border">
 			              <h3 class="box-title">Lab Allocations Tasks</h3>
 			            </div>
-			            <div class="box-body allocation_status">
+			            <div class="box-body">
 			            		<div id="loading_image" style="display:none;"></div>
-			            			<div class="col-md-4">
+			            		<!-- Software Requirement Addition -->
+			            		<div class="col-md-4">
+														<div class="small-box bg-primary">
+															<div class="inner">
+																<p>Software Requirement</p>
+															</div>
+																<div class="icon">
+																  <i class="fa fa-pencil"></i>
+																</div>
+																<button type="button" class="small-box-footer form-control" id="add_res" data-toggle="modal" data-target="#add_req_modal">Add <i class="fa fa-plus"></i></button>
+																<div class="modal fade" id="add_req_modal" role="dialog">
+																		<div class="modal-dialog modal-md">
+																			<div class="modal-content">
+																			  <div class="modal-header bg-primary">
+																						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+																						  <span aria-hidden="true">&times;</span></button>
+																						<h4 class="modal-title"> <i class="fa fa-plus"></i> Add Software Requirement</h4>
+																				</div>
+																					  
+																				<span class="help-block">
+																					<div class="software_req_added_notification">
+																						<div id="loading_image" style="display:none;"></div>
+																							<form method="post" id="" role="form">
+																									<div class="modal-body">
+																											
+																											<div class="form-group col-md-8">
+																												<label class="help-block">Software Requirement : <span class="text-danger">*</span></label>
+																												<input type="text" id="soft_req" required name="soft_req" class="form-control" placeholder="Enter the Software requirement"/>
+																											</div>
+																											<div class="clearfix"></div>
+																									</div>
+																										
+																									<div class="modal-footer">
+																										<button type="button" class="btn btn-default pull-left btn-flat" data-dismiss="modal">Close</button>
+																										<button type="reset" class="btn btn-default btn-flat"></i> Reset</button>
+																										<button type="button" class="btn btn-primary btn-flat" id="add_soft_req"><i class="fa fa-plus"></i> Add</button>
+																									</div>
+																							</form>
+																							</div>
+																				</span><!--end of help block-->
+																		</div>
+																		<!-- /.modal-content -->
+																	  </div>
+																	  <!-- /.modal-dialog -->
+																	</div>
+																	<!-- /.modal -->
+
+																<!-- End of tile for (Software Requirement Addition)-->
+													</div>
+											</div>
+												<div class="clearfix"></div>
+											<div class="col-md-12 allocation_status">
 			            				<?php if(empty($result_from_query)){ 
 			            						echo '<h6 class="text-danger">Cannot Allocate</h6>';
 			            				}else{?>
 			            					<button class="btn btn-success btn-lg allocate_slots" <?php echo  (($result_from_query['status']==0 && $start_date_to_number < $current_date_time  &&  $TO_date_to_number < $current_date_time )? 'disabled' :'');?>><i class="fa fa-check"></i> Allocate</button>
 			            				<?php } ?>	
-			            			</div>
+			            		</div>
 			            </div>
 
 			           </div>
 			      </div>
 
-			      <div class="col-md-6">
-			          <div class="box box-solid">
-			            <div class="box-header with-border">
-			              <h3 class="box-title">Previous Academic Year List</h3>
-			            </div>
-			            <div class="box-body">
-			            		<table class="table table-bordered table-responsive">
-												<thead>
-														<tr>
-															<th>Academic Year</th>
-															<th>Start Time</th>
-															<th>End Time</th>
-														</tr>
-												</thead>
-												<tbody>
-												<?php 
-															$aca_year_list = "SELECT *,
-																									DATE_FORMAT(from_date,'%d %M %Y') AS frm_date,
-			           																	DATE_FORMAT(to_date,'%d %M %Y') AS t_date
-			           															  FROM academic_year 
-			           															  WHERE 
-			           															  	1=1 
-			           															  AND status=0";
-			            				$aca_list = db_all($aca_year_list);
-			            				$aca_str = '';
-			            				if(empty($aca_list)){
-			            					$aca_str .= "<tr>
-																				<td colspan='3'>No recent Academic Year (Closed)</td>
-																			</tr>";
-																		}else{
-																					foreach($aca_list AS $aca){
-			            				$aca_str .= "<tr>
-																				<td>".$aca['aca_year']."</td>
-																				<td>".$aca['frm_date']."</td>
-																				<td>".$aca['t_date']."</td>
-																			</tr>";
-			            			}
-																		}
-			            		
-			            			echo $aca_str;
-			            			?>
-												</tbody>
-													
-											</table>
-			            			
-			            </div>
-			           </div>
-			      </div>
 			      <div class="clearfix"></div>
 			       <div class="col-md-12">
 			          <div class="box box-solid">
@@ -638,7 +683,7 @@ include('pages/required/tables.php');
 								<!-- /.modal -->
 						</div>
 					</div> <!-- End of div and modal-->
-						<!-- The content to display requisition given by the concerned department-->
+						<!-- The content to display requisition given by the concerned department-- ************ PENDING ******>
 						<div class="col-md-12">
 		          <div class="box box-solid">
 		            <div class="box-header with-border">
@@ -708,30 +753,30 @@ include('pages/required/tables.php');
 																																				<label class='help-block'>Semester : <span class='text-danger'>*</span></label>
 																																				<select id='sem' required name='sem' class='form-control'>
 																																					<option val='0'>Choose One</option>
-																																					<option value='3' ".($list_row['coursename'] == 3? 'selected':'').">3</option>
-																																					<option value='4' ".($list_row['coursename'] == 4? 'selected':'').">4</option>
-																																					<option value='5' ".($list_row['coursename'] == 5? 'selected':'').">5</option>
-																																					<option value='6' ".($list_row['coursename'] == 6? 'selected':'').">6</option>
-																																					<option value='7' ".($list_row['coursename'] == 7? 'selected':'').">7</option>
-																																					<option val='8' ".($list_row['coursename'] == 8? 'selected':'').">8</option>
-																																					<option value='9' ".($list_row['coursename'] == 9? 'selected':'').">9</option>
-																																					<option value='10' ".($list_row['coursename'] == 10? 'selected':'').">10</option>
+																																					<option value='3' ".($list_row['sem'] == 3? 'selected':'').">3</option>
+																																					<option value='4' ".($list_row['sem'] == 4? 'selected':'').">4</option>
+																																					<option value='5' ".($list_row['sem'] == 5? 'selected':'').">5</option>
+																																					<option value='6' ".($list_row['sem'] == 6? 'selected':'').">6</option>
+																																					<option value='7' ".($list_row['sem'] == 7? 'selected':'').">7</option>
+																																					<option val='8' ".($list_row['sem'] == 8? 'selected':'').">8</option>
+																																					<option value='9' ".($list_row['sem'] == 9? 'selected':'').">9</option>
+																																					<option value='10' ".($list_row['sem'] == 10? 'selected':'').">10</option>
 																																				</select>
 																																			</div>
 																																			
 																																			<div class='form-group col-md-4'>
 																																				<label class='help-block'>Number of Divisions<span class=''></span></label>
-																																				<input type='text' class='form-control' required id='no_div' name='no_div' placeholder='Enter the number of divisions' value=".$list_row['divisions']."/>
+																																				<input type='text' class='form-control' required id='no_div' name='no_div' placeholder='Enter the number of divisions' value='".$list_row['divisions']."'/>
 																																			</div>
 																																			<div class='form-group col-md-4'>
 																																				<label class='help-block'>Total Number of Students<span class=''></span></label>
-																																				<input type='text' class='form-control' required id='no_students' name='no_students' placeholder='Enter the number of students' value=".$list_row['strength']."/>
+																																				<input type='text' class='form-control' required id='no_students' name='no_students' placeholder='Enter the number of students' value='".$list_row['strength']."'/>
 																																			</div>
 																																			<div class='form-group col-md-4'>
 																																				<label class='help-block'>Academic Year : </label>
 																																				
 																																				 <span class='help-block'><?php echo 'Current Academic Year </span>
-																																				<input type='text' class='form-control' required id='aca_year' name='academic_year' value=".$list_row['academicyear']." disabled/>
+																																				<input type='text' class='form-control' required id='aca_year' name='academic_year' value='".$list_row['academicyear']."' disabled/>
 																																			</div>
 																																		
 																																			<div class='form-group col-md-4'>
@@ -976,6 +1021,29 @@ $(document).on('change','.dept_id',function(e){
 					});
 
 	});
+
+//for adding Software requirement
+$(document).on('click','#add_soft_req',function(e){
+		e.preventDefault();
+		//alert("clicked");
+		var soft_req = $('#soft_req').val();
+		//alert(soft_req);
+		var soft_req_url = "ajax/add_software_req.ajax.php";
+		//$("div #loading_image").removeAttr("style");
+		$.post(
+				soft_req_url,{
+					p1 : soft_req
+				},
+				function(data,status){
+						//alert(data+'-'+status);
+						$('#software_req_added_notification').html(data);
+					
+					/*setTimeout(function () {
+							window.location.reload();
+						}, 3000);*/
+					});
+	});
+
 
 });
 </script>
