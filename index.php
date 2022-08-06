@@ -639,26 +639,25 @@ include('pages/required/tables.php');
 																		</div>
 																		<div class="form-group col-md-4">
 																			<label class="help-block">Academic Year : </label>
-																			<?php $academic_year_query = "SELECT * FROM academic_year WHERE 1=1 AND status = 1";
+																			<?php $academic_year_query = "SELECT * FROM academic_year WHERE 1=1 AND status = 1 ORDER BY id DESC LIMIT 1";
 																				$aca_year_result = db_one($academic_year_query);
 																			 ?>
 																			 <span class="help-block"><?php echo 'Current Academic Year is :'.$aca_year_result['aca_year'];?></span>
-																			<input type="text" class="form-control" required id="aca_year" name="academic_year" value="<?php echo $aca_year_result['id'];?>" disabled/>
+																			<input type="number" class="form-control" required id="aca_year" name="academic_year" value="<?php echo $aca_year_result['id'];?>" disabled/>
 																		</div>
 																	
 																		<div class="form-group col-md-4">
 																			<label class="help-block">Software Requirement :<span class="text-danger">*</span></label>
 																			<select class="form-control" name="req">
 																				<option value="0">Choose One</option>
-																				<option value="1">Linux machines</option>
-																				<option value="2">PyCharm Python </option>
-																				<option value="3">Ubuntu Version 18 +</option>
-																				<option value="4">Android Studio</option>
-																				<option value="5">Spark Studio</option>
-																				<option value="6">IOT kits</option>
-																				<option value="7">AutoCAD</option>
-																				<option value="8">Netbeans</option>
-																				
+																			<?php $soft_req_query = "SELECT * FROM software_requirements WHERE 1=1 AND status=1";
+																			$soft_list = db_all($soft_req_query);
+																			$soft_string = '';
+																			foreach($soft_list AS $soft){
+																				$soft_string .='<option value="'.$soft["id"].'">'.$soft["software_req"].'</option>';
+																			}
+																			echo $soft_string;
+																			?>
 																			</select>
 																			<!--textarea class="form-control" required id="req" name="req" rows="2" cols="2"></textarea-->
 																			
@@ -683,7 +682,7 @@ include('pages/required/tables.php');
 								<!-- /.modal -->
 						</div>
 					</div> <!-- End of div and modal-->
-						<!-- The content to display requisition given by the concerned department-- ************ PENDING ******>
+						<!-- The content to display requisition given by the concerned department-- ************ PENDING ******-->
 						<div class="col-md-12">
 		          <div class="box box-solid">
 		            <div class="box-header with-border">
@@ -721,8 +720,8 @@ include('pages/required/tables.php');
 													            					<td>".$list_row['academicyear']."</td>
 													            					<td>".$list_row['softwarereq']."</td>
 													            					<td>
-													            						<button class='btn btn-warning' data-toggle='modal' data-target='#edit_req_data' title='Edit'><i class='fa fa-pencil'></i></button>
-													            						<div class='modal fade' id='edit_req_data' role='dialog'>
+													            						<button class='btn btn-warning' data-toggle='modal' data-target='#edit_req_data".$i."' title='Edit'><i class='fa fa-pencil'></i></button>
+													            						<div class='modal fade' id='edit_req_data".$i."' role='dialog'>
 																										  <div class='modal-dialog modal-lg'>
 																											<div class='modal-content'>
 																											  <div class='modal-header bg-primary'>
@@ -803,7 +802,7 @@ include('pages/required/tables.php');
 																																	<div class='modal-footer'>
 																																		<button type='button' class='btn btn-default pull-left btn-flat' data-dismiss='modal'>Close</button>
 																																		<button type='reset' class='btn btn-default btn-flat'></i> Reset</button>
-																																		<button type='submit' class='btn btn-primary btn-flat' id='add_requisition'><i class='fa fa-check'></i> Submit</button>
+																																		<button type='submit' class='btn btn-primary btn-flat' id='edit_requisition'><i class='fa fa-check'></i> Submit</button>
 																																	</div>
 																															</form>
 																															</div>
@@ -880,27 +879,9 @@ $(document).ready(function(){
 	//form processing for storing resolution data.
 	$(document).on('submit','#add_requisition',function(e){
 		e.preventDefault();
-		/*var res_title = $('#res_title').val();
-		var cat_id = $('#cat_id').val();
-		//var res_status_id = $('#res_status_id').val();
-		var res_date = $('.res_date').val();
-		var dept = $('#dept').val();
-		var res_no = $('#res_no').val();
-		var sanctioning_auth = $('#sanctioning_auth').val();
-		var res_image = $('.res_image').prop('files')[0];
-		//;//val();//
-		var res_doc = $('#res_doc').val();
+		var aca_year = $('#aca_year').val();
+		alert(aca_year);
 		
-		//alert(res_image);
-		//alert(res_title+'-'+cat_id+'-'+res_status_id+'-'+res_date+'-'+dept+'-'+res_no+'-'+sanctioning_auth+'-'+res_doc+'-'+res_image);
-		//alert()
-		//var url = 'ajax/save_resolution_data.ajax.php';
-		if(res_title == "" || cat_id == 0  || res_date == "" || dept == 0 || sanctioning_auth == 0  || (typeof(res_image) != "undefined" && res_image !== null)){
-			alert("Fill all the fields");
-			
-		}else{*/
-			//var formData = new FormData()
-			//alert('Everything is filled up');
 			$.ajax({
 				url: 'ajax/save_requisition_data.ajax.php', 
 				type: 'POST',
@@ -1022,7 +1003,7 @@ $(document).on('change','.dept_id',function(e){
 
 	});
 
-//for adding Software requirement
+//for adding new Software requirement
 $(document).on('click','#add_soft_req',function(e){
 		e.preventDefault();
 		//alert("clicked");
@@ -1036,11 +1017,11 @@ $(document).on('click','#add_soft_req',function(e){
 				},
 				function(data,status){
 						//alert(data+'-'+status);
-						$('#software_req_added_notification').html(data);
+						$('.software_req_added_notification').html(data);
 					
-					/*setTimeout(function () {
+					setTimeout(function () {
 							window.location.reload();
-						}, 3000);*/
+						}, 3000);
 					});
 	});
 

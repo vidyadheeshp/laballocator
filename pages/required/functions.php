@@ -64,7 +64,7 @@
 				}else{
 					return 0;
 				}
-			//return $return_msg;
+			return $return_msg;
 	}
 	
 	function db_update($table_name,$set_value,$where_value){
