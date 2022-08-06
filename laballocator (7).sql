@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 05, 2022 at 12:23 PM
+-- Generation Time: Aug 06, 2022 at 09:56 AM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 7.4.28
 
@@ -41,7 +41,7 @@ CREATE TABLE `academic_year` (
 
 INSERT INTO `academic_year` (`id`, `from_date`, `to_date`, `aca_year`, `status`) VALUES
 (1, '2022-06-01', '2022-07-30', '2022-2023', 1),
-(2, '2022-08-01', '2022-08-31', '2022-2023', 1);
+(3, '2022-08-01', '2022-08-31', '2022-2023', 1);
 
 -- --------------------------------------------------------
 
@@ -57,7 +57,7 @@ CREATE TABLE `courses` (
   `sem` int(11) NOT NULL,
   `divisions` int(11) NOT NULL,
   `strength` int(11) NOT NULL,
-  `softwarereq` varchar(100) NOT NULL,
+  `softwarereq` int(11) NOT NULL,
   `duration` int(11) NOT NULL,
   `academicyear` int(11) NOT NULL,
   `allocation_status` int(11) NOT NULL
@@ -68,28 +68,28 @@ CREATE TABLE `courses` (
 --
 
 INSERT INTO `courses` (`cid`, `coursecode`, `coursename`, `deptid`, `sem`, `divisions`, `strength`, `softwarereq`, `duration`, `academicyear`, `allocation_status`) VALUES
-(1, '18CSL67', ' AI & Machine Learning Lab', 5, 6, 4, 211, '\"Ubuntu Version 18 +, PyCharm Python (3.', 3, 1, 1),
-(2, '18CSL68', 'Embedded Systems and IoT Lab', 5, 6, 4, 211, 'Windows OS, Keil,Thony Python', 3, 1, 1),
-(3, '18CSL46', 'Python Programming (Integrated', 5, 4, 4, 220, '', 3, 1, 1),
-(5, '18CSL48', 'Database Application Lab', 5, 4, 4, 220, '', 3, 1, 1),
-(6, '18CSL36', 'Artificial Intelligence & ML L', 5, 6, 4, 211, 'dkrfjg', 3, 1, 1),
-(9, '18CSL66', 'DataBase Lab', 5, 4, 4, 211, 'szdvsdfvsafv', 3, 1, 1),
-(10, '18CSL47', 'DAA Lab', 5, 6, 4, 211, 'zdfh', 3, 1, 1),
-(11, '20MCA21', 'DS', 10, 2, 2, 120, '', 2, 1, 1),
-(12, '20MCA22', 'Java & J2EE', 10, 2, 2, 120, 'netbeans', 2, 1, 1),
-(13, '20MCA24', 'WDD', 10, 2, 4, 120, '', 2, 1, 1),
-(16, '18ISL46', 'Machine Interfacing', 8, 4, 1, 55, 'IOT kits', 3, 1, 1),
-(17, '18ISL47', 'ISlab 4sem', 8, 4, 1, 55, '', 3, 1, 1),
-(18, '18MEL47', 'Auto Cad', 11, 4, 4, 219, '', 3, 1, 1),
-(19, '18MEL48', 'ME lab 4', 11, 4, 4, 219, '', 3, 1, 1),
-(22, '22FYL27', 'C Programming', 7, 2, 8, 287, '', 2, 1, 1),
-(23, 'CSEBYOD', 'CS Dept', 4, 6, 6, 60, '', 3, 1, 1),
-(26, '22FYL17', 'C Programming', 7, 1, 8, 400, '', 2, 1, 1),
-(27, '22FYL28', 'Graphics', 7, 2, 8, 400, '', 2, 1, 1),
-(28, '18CVL36', 'Building Planning and Drawing', 3, 3, 3, 150, 'Windows 10, AutoCAD, MS-Office\r\n', 3, 1, 1),
-(29, '18CVL78', 'Software Application Laborator', 3, 7, 3, 150, 'Windows 10, STAAD.Pro, MS-Office\r\n', 3, 1, 0),
-(30, '20IS48', 'Something', 8, 4, 1, 58, 'internet of things', 3, 1, 1),
-(31, '18CSL56', 'Software Design lab', 5, 5, 4, 210, 'Linux machines', 0, 1, 0);
+(1, '18CSL67', ' AI & Machine Learning Lab', 5, 6, 4, 211, 2, 3, 1, 1),
+(2, '18CSL68', 'Embedded Systems and IoT Lab', 5, 6, 4, 211, 3, 3, 1, 1),
+(3, '18CSL46', 'Python Programming (Integrated', 5, 4, 4, 220, 8, 3, 1, 1),
+(5, '18CSL48', 'Database Application Lab', 5, 4, 4, 220, 2, 3, 1, 1),
+(6, '18CSL36', 'Artificial Intelligence & ML L', 5, 6, 4, 211, 2, 3, 1, 1),
+(9, '18CSL66', 'DataBase Lab', 5, 4, 4, 211, 8, 3, 1, 1),
+(10, '18CSL47', 'DAA Lab', 5, 6, 4, 211, 9, 3, 1, 1),
+(11, '20MCA21', 'DS', 10, 2, 2, 120, 9, 2, 1, 1),
+(12, '20MCA22', 'Java & J2EE', 10, 2, 2, 120, 12, 2, 1, 1),
+(13, '20MCA24', 'WDD', 10, 2, 4, 120, 6, 2, 1, 1),
+(16, '18ISL46', 'Machine Interfacing', 8, 4, 1, 55, 7, 3, 1, 1),
+(17, '18ISL47', 'ISlab 4sem', 8, 4, 1, 55, 4, 3, 1, 1),
+(18, '18MEL47', 'Auto Cad', 11, 4, 4, 219, 8, 3, 1, 1),
+(19, '18MEL48', 'ME lab 4', 11, 4, 4, 219, 5, 3, 1, 1),
+(22, '22FYL27', 'C Programming', 7, 2, 8, 287, 11, 2, 1, 1),
+(23, 'CSEBYOD', 'CS Dept', 4, 6, 6, 60, 11, 3, 1, 1),
+(26, '22FYL17', 'C Programming', 7, 1, 8, 400, 11, 2, 1, 1),
+(27, '22FYL28', 'Graphics', 7, 2, 8, 400, 8, 2, 1, 1),
+(28, '18CVL36', 'Building Planning and Drawing', 3, 3, 3, 150, 8, 3, 1, 1),
+(29, '18CVL78', 'Software Application Laborator', 3, 7, 3, 150, 9, 3, 1, 0),
+(30, '20IS48', 'Something', 8, 4, 1, 58, 1, 3, 1, 1),
+(31, '18CSL56', 'Software Design lab', 5, 5, 4, 210, 8, 0, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -1053,10 +1053,17 @@ CREATE TABLE `software_requirements` (
 
 INSERT INTO `software_requirements` (`id`, `software_req`, `status`) VALUES
 (1, 'Android Studio', 1),
-(2, 'Android Studio', 1),
-(3, 'Linux Kali machines', 1),
+(2, 'Pycharm', 1),
+(3, 'IoT kits', 1),
 (4, 'Spark Studio', 1),
-(5, 'Linux Kali machines', 1);
+(5, 'Linux Kali machines', 1),
+(6, 'Ubuntu Version 18', 1),
+(7, 'CAED Software', 1),
+(8, 'Dia Tool', 1),
+(9, 'Code Blocks', 1),
+(10, 'UiPath', 1),
+(11, 'KDeveloper', 1),
+(12, 'Net Beans', 1);
 
 -- --------------------------------------------------------
 
@@ -1180,7 +1187,7 @@ ALTER TABLE `user_type`
 -- AUTO_INCREMENT for table `academic_year`
 --
 ALTER TABLE `academic_year`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `courses`
@@ -1216,7 +1223,7 @@ ALTER TABLE `slot_list`
 -- AUTO_INCREMENT for table `software_requirements`
 --
 ALTER TABLE `software_requirements`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `users`
