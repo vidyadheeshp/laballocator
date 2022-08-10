@@ -20,20 +20,21 @@ ini_set('display_errors', 1);
 	$sem = $_POST['sem'];
 	$no_div = $_POST['no_div'];
 	$no_students = $_POST['no_students'];
+	$duration = $_POST['duration'];
 	$aca_year = $_POST['academic_year']; 
 	$req = $_POST['req'];
 	
-	echo $aca_year.'<br/> Academic year';
+	//echo $_POST['academic_year'];
 	//required_data
 	$cid = "NULL";
 	$allocation_status = 0;
 	$table_no = 1;
 	$table_name = 'courses';
 
-	$insert_values = $cid.",'".$course_code."','".$course_name."',".$dept.",".$sem.",".$no_div.",".$no_students.",".$req.",".$aca_year.",".$allocation_status;
+	$insert_values = $cid.',"'.$course_code.'","'.$course_name.'",'.$dept.','.$sem.','.$no_div.','.$no_students.','.$req.','.$duration.','.$aca_year.','.$allocation_status;
 					
 	echo $insert_values;				
-	$Insert_result = db_insert($table_no,$table_name,$insert_values);
+	//$Insert_result = db_insert($table_no,$table_name,$insert_values);
 
 	if($Insert_result == 1){
 		

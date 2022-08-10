@@ -630,12 +630,16 @@ include('pages/required/tables.php');
 																		</div>
 																		
 																		<div class="form-group col-md-4">
-																			<label class="help-block">Number of Divisions<span class=""></span></label>
+																			<label class="help-block">Number of Divisions<span class="text-danger">*</span></label>
 																			<input type="text" class="form-control" required id="no_div" name="no_div" placeholder="Enter the number of divisions"/>
 																		</div>
 																		<div class="form-group col-md-4">
-																			<label class="help-block">Total Number of Students<span class=""></span></label>
+																			<label class="help-block">Total Number of Students<span class="text-danger">*</span></label>
 																			<input type="text" class="form-control" required id="no_students" name="no_students" placeholder="Enter the number of students"/>
+																		</div>
+																		<div class="form-group col-md-4">
+																			<label class="help-block">Duration<span class="text-danger">*</span></label>
+																			<input type="text" class="form-control" required id="duration" name="duration" placeholder="Enter the duration of lab"/>
 																		</div>
 																		<div class="form-group col-md-4">
 																			<label class="help-block">Academic Year : </label>
@@ -643,9 +647,17 @@ include('pages/required/tables.php');
 																				$aca_year_result = db_one($academic_year_query);
 																			 ?>
 																			 <span class="help-block"><?php echo 'Current Academic Year is :'.$aca_year_result['aca_year'];?></span>
-																			<input type="number" class="form-control" required id="aca_year" name="academic_year" value="<?php echo $aca_year_result['id'];?>" disabled/>
+																			<!--input type="text" class="form-control" required id="academic_year" name="academic_year" disabled/-->
+																			<select class="form-control" name="academic_year">
+																				<option value="0"> Choose One</option>
+																				<?php 
+																					$academic_year_string = "";
+																					$academic_year_string .="<option value='".$aca_year_result['id']."' selected>".$aca_year_result['aca_year']."</option>";
+																					echo $academic_year_string;
+																				?>
+																			</select>
 																		</div>
-																	
+																		<div class="clearfix"></div>
 																		<div class="form-group col-md-4">
 																			<label class="help-block">Software Requirement :<span class="text-danger">*</span></label>
 																			<select class="form-control" name="req">
@@ -772,6 +784,10 @@ include('pages/required/tables.php');
 																																				<input type='text' class='form-control' required id='no_students' name='no_students' placeholder='Enter the number of students' value='".$list_row['strength']."'/>
 																																			</div>
 																																			<div class='form-group col-md-4'>
+																																				<label class='help-block'>Duration<span class='text-danger'>*</span></label>
+																																				<input type='text' class='form-control' required id='duration' name='duration' value='".$list_row['duration']."'/>
+																																			</div>
+																																			<div class='form-group col-md-4'>
 																																				<label class='help-block'>Academic Year : </label>
 																																				
 																																				 <span class='help-block'><?php echo 'Current Academic Year </span>
@@ -879,9 +895,15 @@ $(document).ready(function(){
 	//form processing for storing resolution data.
 	$(document).on('submit','#add_requisition',function(e){
 		e.preventDefault();
-		var aca_year = $('#aca_year').val();
-		alert(aca_year);
-		
+		///var aca_year = $('#academic_year').val();
+		//alert(aca_year);
+
+		// Get form
+        var form = $('#add_requisition')[0];
+ 
+       // Create an FormData object 
+        //var data = new FormData(form);
+		//alert(data);
 			$.ajax({
 				url: 'ajax/save_requisition_data.ajax.php', 
 				type: 'POST',

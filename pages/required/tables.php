@@ -3,7 +3,7 @@
 	$tables = array(
 		1 => 
 			array (
-				'courses' => 'cid, coursecode, coursename, deptid, sem, divisions, strength, softwarereq, academicyear, allocation_status'
+				'courses' => 'cid, coursecode, coursename, deptid, sem, divisions, strength, softwarereq, duration, academicyear, allocation_status'
 				),
 		2 => 
 			array (
