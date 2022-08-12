@@ -16,7 +16,6 @@ include('pages/required/tables.php');
 
 	$loggen_in_query = "SELECT 
 									um.*
-
 								FROM 
 									users um
 								WHERE
@@ -224,10 +223,12 @@ include('pages/required/tables.php');
 			</div>
 			<div class="pull-left info">
 			  <p><?php if(isset($_SESSION['name'])) {echo  $_SESSION['name'];}?></p>
-			 <?php if($login_query_result ['id'] == 1){?>
-				  <a href="#"><i class="fa fa-circle text-success"></i> Admin</a>
-				<?php }else{?>
-				  <a href="#"><i class="fa fa-circle text-aqua"></i> User</a>
+			 <?php if($login_query_result ['uid'] == 1){?>
+				  <a href="#"><i class="fa fa-circle text-success"></i>CC Admin</a>
+				<?php }else if($login_query_result ['uid'] == 2){?>
+				  <a href="#"><i class="fa fa-circle text-aqua"></i>HoD</a>
+				<?php }else if($login_query_result ['uid'] == 3){?>
+					<a href="#"><i class="fa fa-circle text-aqua"></i>Lab Instructor</a>
 				<?php }?>
 			</div>
 		  </div>
@@ -264,7 +265,16 @@ include('pages/required/tables.php');
 				</span>
 			  </a>
 			</li>
-			
+			<?php if($login_query_result['uid'] ==3){?>
+			<li>
+			  <a href="my_lab_slots.php">
+				<i class="fa fa-cubes"></i> <span>My Lab Slots</span>
+				<span class="pull-right-container">
+				  <i class="fa fa-angle-right pull-right"></i>
+				</span>
+			  </a>
+			</li>
+			<?php }?>
 		</ul>
 	</section>
   </aside>
@@ -731,9 +741,14 @@ include('pages/required/tables.php');
 													            					<td>".$list_row['strength']."</td>
 													            					<td>".$list_row['academicyear']."</td>
 													            					<td>".$list_row['softwarereq']."</td>
-													            					<td>
-													            						<button class='btn btn-warning' data-toggle='modal' data-target='#edit_req_data".$i."' title='Edit'><i class='fa fa-pencil'></i></button>
-													            						<div class='modal fade' id='edit_req_data".$i."' role='dialog'>
+													            					<td>";
+													            					if($list_row['allocation_status'] == 0){
+													            							$list_string .="<button class='btn btn-warning' data-toggle='modal' data-target='#edit_req_data".$i."' title='Edit'><i class='fa fa-pencil'></i></button>";
+													            					}else{
+													            						$list_string .="<h5 class='text-success'>Allocation Done</h5>";
+													            					}
+													            						
+													            						$list_string .="<div class='modal fade' id='edit_req_data".$i."' role='dialog'>
 																										  <div class='modal-dialog modal-lg'>
 																											<div class='modal-content'>
 																											  <div class='modal-header bg-primary'>
@@ -797,17 +812,15 @@ include('pages/required/tables.php');
 																																			<div class='form-group col-md-4'>
 																																				<label class='help-block'>Software Requirement :<span class='text-danger'>*</span></label>
 																																				<select class='form-control' name='req'>
-																																					<option value='0' >Choose One</option>
-																																					<option value='1' ".($list_row['softwarereq'] == 1 ? 'selected':'').">Linux machines</option>
-																																					<option value='2' ".($list_row['softwarereq'] == 2 ? 'selected':'').">PyCharm Python </option>
-																																					<option value='3' ".($list_row['softwarereq'] == 3 ? 'selected':'').">Ubuntu Version 18 +</option>
-																																					<option value='4' ".($list_row['softwarereq'] == 4 ? 'selected':'').">Android Studio</option>
-																																					<option value='5' ".($list_row['softwarereq'] == 5 ? 'selected':'').">Spark Studio</option>
-																																					<option value='6' ".($list_row['softwarereq'] == 6 ? 'selected':'').">IOT kits</option>
-																																					<option value='7' ".($list_row['softwarereq'] == 7 ? 'selected':'').">AutoCAD</option>
-																																					<option value='8' ".($list_row['softwarereq'] == 8 ? 'selected':'').">Netbeans</option>
+																																					<option value='0' >Choose One</option>";
+																																					$soft_req_query = "SELECT * FROM software_requirements WHERE status=1";
+																																					$soft_req_result = db_all($soft_req_query);
+																																					foreach ($soft_req_result as $soft_val) {
+																																						$list_string .="<option value='".$soft_val['id']."' ".($soft_val['id'] ==  $list_row['softwarereq'] ? 'selected':'').">".$soft_val['software_req']."</option>";
+																																					}
 																																					
-																																				</select>
+																																					
+																																				$list_string .="</select>
 																																				<!--textarea class='form-control' required id='req' name='req' rows='2' cols='2'></textarea-->
 																																				
 																																			</div>
@@ -818,6 +831,7 @@ include('pages/required/tables.php');
 																																	<div class='modal-footer'>
 																																		<button type='button' class='btn btn-default pull-left btn-flat' data-dismiss='modal'>Close</button>
 																																		<button type='reset' class='btn btn-default btn-flat'></i> Reset</button>
+																																		<input type='hidden'  name='cid' value='".$list_row['cid']."'>
 																																		<button type='submit' class='btn btn-primary btn-flat' id='edit_requisition'><i class='fa fa-check'></i> Submit</button>
 																																	</div>
 																															</form>
@@ -1047,6 +1061,45 @@ $(document).on('click','#add_soft_req',function(e){
 					});
 	});
 
+
+
+//form editing the  for requisiont data. (Already entered)
+	$(document).on('submit','#edit_requisition',function(e){
+		e.preventDefault();
+		///var aca_year = $('#academic_year').val();
+		//alert(aca_year);
+
+		// Get form
+      //  var form = $('#add_requisition')[0];
+ 
+       // Create an FormData object 
+        //var data = new FormData(form);
+		//alert(data);
+			$.ajax({
+				url: 'ajax/update_requisition_data.ajax.php', 
+				type: 'POST',
+				data: new FormData(this),
+				processData: false,
+				contentType: false,
+				success: function(data) {
+					$('.requisition_updated_notification').html(data);
+					/*setTimeout(function () {
+							window.location.reload();
+						}, 2000);*/
+				}
+			});
+		/*$.post(
+				url,{
+					r1 : res_title, r2 :  cat_id, r3 : res_status_id, r4 : res_date, r5 : dept, r6 : res_no,  r7 : sanctioning_auth, r8 : res_doc, r9 : res_image
+				},
+				function(data,status){
+						$('.resolution_added_notification').html(data);
+						/*setTimeout(function () {
+							window.location.reload();
+						}, 3000);*/
+		//}
+				
+	});
 
 });
 </script>

@@ -256,7 +256,7 @@ include('pages/required/tables.php');
 				</span>
 			  </a>
 			</li>
-			<li class="active">
+			<li>
 			  <a href="lab_slot.php">
 				<i class="fa fa-bar-chart"></i> <span>Lab Allocation Chart</span>
 				<span class="pull-right-container">
@@ -265,7 +265,7 @@ include('pages/required/tables.php');
 			  </a>
 			</li>
 			<?php if($login_query_result['uid'] ==3){?>
-			<li>
+			<li class="active">
 			  <a href="my_lab_slots.php">
 				<i class="fa fa-cubes"></i> <span>My Lab Slots</span>
 				<span class="pull-right-container">
@@ -302,9 +302,7 @@ include('pages/required/tables.php');
 				<!-- ************************************The Page Content has to be Added Here **********************************************-->
 
 				<div class="row">
-	         
-	      <div class="col-md-12">
-	      		<div class="box box-solid col-md-12">
+					<div class="box box-solid col-md-12">
             <div class="box-header with-border">
               <h3 class="box-title">Indicators</h3>
             </div>
@@ -328,39 +326,6 @@ include('pages/required/tables.php');
               </div>
                </div>
             </div>
-	        <!-- /.col -->
-	        <div class="clearfix"></div>
-	          <div class="box box-solid">
-	            <div class="box-header with-border">
-	              <h3 class="box-title">Filter</h3>
-	            </div>
-	            <div class="box-body">
-	            		<div class="col-md-4">
-	            			<select class="form-control" id="lab_list">
-	            				<option value="0">choose one</option>
-	            				<?php 
-	            				$lab_list_str = '';
-	            					$lab_query = "SELECT * FROM labs WHERE 1=1";
-	            					$lab_list = db_all($lab_query);
-	            					foreach($lab_list AS $labname){
-	            							$lab_list_str .="<option value='".$labname['labid']."'>".$labname['labname']."</option>"; 
-
-	            					}
-	            					echo $lab_list_str;
-	            				?>
-	            				
-	            			</select>
-	            		</div>
-	            		<div class="col-md-4">
-	            			<button class="btn btn-primary lab_slot_view"><i class="fa fa-search"></i> View</button>
-	            		</div>
-	            		<div class="clearfix"></div>
-
-	             
-	            </div>
-	          </div>
-	        </div>
-	        <div class="clearfix"></div>
 	        <!-- /.col -->
 	        <div class="col-md-12 " id="calender_div">
 	          <div class="box box-primary" >
@@ -522,7 +487,7 @@ $(function() {
         m = date.getMonth(),
         y = date.getFullYear();
     var lab_id_choosen = $('#lab_list').val();
-    var calender_content_url = "calender_events.php";
+    var calender_content_url = "lab_calender_events.php";
     //alert(lab_id_choosen+'=>'+calender_content_url);
     $('#calendar').fullCalendar({
       header: {
