@@ -65,8 +65,9 @@ ini_set('display_errors', 1);
 		}
 
 ?>
-<div class="col-xs-6 col-md-3 text-center">
-    <input type="text" class="knob" value="<?php echo $result['requisition_count'];?>" data-width="90" data-height="90" data-fgColor="<?php echo $backgroundcolor;?>">
+<h1 style="font-size: 80px; color: <?php echo $backgroundcolor; ?>;"><?php echo $result['requisition_count']; ?></h1>
+<!--div class="col-xs-6 col-md-3 text-center">
+    <input type="text" class="knob" value="<?php //echo $result['requisition_count'];?>" data-width="90" data-height="90" data-fgColor="<?php //echo $backgroundcolor;?>">
 
   <div class="knob-label">Requisition Count</div>
-</div>
+</div-->

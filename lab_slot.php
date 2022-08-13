@@ -264,10 +264,20 @@ include('pages/required/tables.php');
 				</span>
 			  </a>
 			</li>
-			<?php if($login_query_result['uid'] ==3){?>
+			<?php if($login_query_result['uid'] == 3){?>
 			<li>
 			  <a href="my_lab_slots.php">
 				<i class="fa fa-cubes"></i> <span>My Lab Slots</span>
+				<span class="pull-right-container">
+				  <i class="fa fa-angle-right pull-right"></i>
+				</span>
+			  </a>
+			</li>
+			<?php }
+				if($login_query_result['uid'] == 2){?>
+				<li class="active">
+			  <a href="dept_lab_slots.php">
+				<i class="fa fa-cubes"></i> <span>Dept Lab Slots</span>
 				<span class="pull-right-container">
 				  <i class="fa fa-angle-right pull-right"></i>
 				</span>

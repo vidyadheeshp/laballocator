@@ -274,7 +274,17 @@ include('pages/required/tables.php');
 				</span>
 			  </a>
 			</li>
-			<?php }?>
+			<?php }
+			if($login_query_result['uid'] == 2){?>
+				<li>
+			  <a href="dept_lab_slots.php">
+				<i class="fa fa-cubes"></i> <span>Dept Lab Slots</span>
+				<span class="pull-right-container">
+				  <i class="fa fa-angle-right pull-right"></i>
+				</span>
+			  </a>
+			</li>
+			<?php } ?>	
 		</ul>
 	</section>
   </aside>
@@ -302,7 +312,7 @@ include('pages/required/tables.php');
 					<section class="col-lg-12 connectedSortable">
 						
 				  <?php 
-				  	if($login_query_result ['id'] == 1){
+				  	if($login_query_result ['uid'] == 1){
 				  ?>
 				  <div class="row">
 						 	<div class="col-md-6">
@@ -567,9 +577,8 @@ include('pages/required/tables.php');
 
 		      </div> 
 					<?php
-					//*************************content of Login for other users **************************************//
-				}else{
-					?>
+					//*************************content of Login for Dept users (HoD)**************************************//
+				}elseif($login_query_result ['uid'] == 2){?>
 					<div class="col-lg-3 col-xs-6 col-md-4">
 				  <!-- small box -->
 						<div class="small-box bg-aqua">
@@ -856,6 +865,19 @@ include('pages/required/tables.php');
 		            </div>
 		          </div>
 	        </div>
+
+					
+					<?php //*************************content of Login for Lab users **************************************//
+				}else{?>
+					<div class="col-md-12">
+		          <div class="box box-solid">
+		            <div class="box-header with-border">
+		              <h3 class="box-title">Lab Utilization Statistics</h3>
+		            </div>
+		            <div class="box-body">
+		           	</div>
+		          </div>
+		      </div>	
 		<?php }?>
 			  <!-- /.row (main row) -->
 				</section>
@@ -887,7 +909,70 @@ include('pages/required/tables.php');
 <script src="plugins/daterangepicker/daterangepicker.js"></script>
 <script src="plugins/jQuery/jquery-2.2.3.min.js"></script>
 <script type="text/javascript" src="plugins/table2excel/dist/jquery.table2excel.min.js"></script>
+<!-- jQuery Knob -->
+<script src="plugins/knob/jquery.knob.js"></script>
+<script>
+  $(function () {
+    /* jQueryKnob */
 
+    $(".knob").knob({
+      /*change : function (value) {
+       //console.log("change : " + value);
+       },
+       release : function (value) {
+       console.log("release : " + value);
+       },
+       cancel : function () {
+       console.log("cancel : " + this.value);
+       },*/
+      draw: function () {
+
+        // "tron" case
+        if (this.$.data('skin') == 'tron') {
+
+          var a = this.angle(this.cv)  // Angle
+              , sa = this.startAngle          // Previous start angle
+              , sat = this.startAngle         // Start angle
+              , ea                            // Previous end angle
+              , eat = sat + a                 // End angle
+              , r = true;
+
+          this.g.lineWidth = this.lineWidth;
+
+          this.o.cursor
+          && (sat = eat - 0.3)
+          && (eat = eat + 0.3);
+
+          if (this.o.displayPrevious) {
+            ea = this.startAngle + this.angle(this.value);
+            this.o.cursor
+            && (sa = ea - 0.3)
+            && (ea = ea + 0.3);
+            this.g.beginPath();
+            this.g.strokeStyle = this.previousColor;
+            this.g.arc(this.xy, this.xy, this.radius - this.lineWidth, sa, ea, false);
+            this.g.stroke();
+          }
+
+          this.g.beginPath();
+          this.g.strokeStyle = r ? this.o.fgColor : this.fgColor;
+          this.g.arc(this.xy, this.xy, this.radius - this.lineWidth, sat, eat, false);
+          this.g.stroke();
+
+          this.g.lineWidth = 2;
+          this.g.beginPath();
+          this.g.strokeStyle = this.o.fgColor;
+          this.g.arc(this.xy, this.xy, this.radius - this.lineWidth + 1 + this.lineWidth * 2 / 3, 0, 2 * Math.PI, false);
+          this.g.stroke();
+
+          return false;
+        }
+      }
+    });
+	
+});
+    /* END JQUERY KNOB */
+</script>
 <script>
 
 
@@ -1106,70 +1191,7 @@ $(document).on('click','#add_soft_req',function(e){
 <!-- jQuery UI 1.11.4 -->
 <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
-<!-- jQuery Knob Chart -->
-<script src="plugins/knob/jquery.knob.js"></script>
-<script>
-  $(function () {
-    /* jQueryKnob */
 
-    $(".knob").knob({
-      /*change : function (value) {
-       //console.log("change : " + value);
-       },
-       release : function (value) {
-       console.log("release : " + value);
-       },
-       cancel : function () {
-       console.log("cancel : " + this.value);
-       },*/
-      draw: function () {
-
-        // "tron" case
-        if (this.$.data('skin') == 'tron') {
-
-          var a = this.angle(this.cv)  // Angle
-              , sa = this.startAngle          // Previous start angle
-              , sat = this.startAngle         // Start angle
-              , ea                            // Previous end angle
-              , eat = sat + a                 // End angle
-              , r = true;
-
-          this.g.lineWidth = this.lineWidth;
-
-          this.o.cursor
-          && (sat = eat - 0.3)
-          && (eat = eat + 0.3);
-
-          if (this.o.displayPrevious) {
-            ea = this.startAngle + this.angle(this.value);
-            this.o.cursor
-            && (sa = ea - 0.3)
-            && (ea = ea + 0.3);
-            this.g.beginPath();
-            this.g.strokeStyle = this.previousColor;
-            this.g.arc(this.xy, this.xy, this.radius - this.lineWidth, sa, ea, false);
-            this.g.stroke();
-          }
-
-          this.g.beginPath();
-          this.g.strokeStyle = r ? this.o.fgColor : this.fgColor;
-          this.g.arc(this.xy, this.xy, this.radius - this.lineWidth, sat, eat, false);
-          this.g.stroke();
-
-          this.g.lineWidth = 2;
-          this.g.beginPath();
-          this.g.strokeStyle = this.o.fgColor;
-          this.g.arc(this.xy, this.xy, this.radius - this.lineWidth + 1 + this.lineWidth * 2 / 3, 0, 2 * Math.PI, false);
-          this.g.stroke();
-
-          return false;
-        }
-      }
-    });
-	
-});
-    /* END JQUERY KNOB */
-</script>
 <script>
   $.widget.bridge('uibutton', $.ui.button);
 </script>

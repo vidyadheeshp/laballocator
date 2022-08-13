@@ -23,6 +23,11 @@ ini_set('display_errors', 1);
 				la.labname,
 				c.deptid,
 				u.Name,
+				c.sem,
+				l.conduction_status,
+				l.student_count,
+				l.updated_by,
+				l.faculty_details,
 				DATE_FORMAT(l.date_start,''),
 				DATE_FORMAT(l.date_start,'%h:%i %p')AS start_time,
 				DATE_FORMAT(l.date_end,'%h:%i %p') AS end_time
@@ -63,8 +68,13 @@ ini_set('display_errors', 1);
 		<th>Department </th>
 		<td><?php echo $result['Name']?></td>
 	</tr>
+	<tr>
+		<th>Semester </th>
+		<td><?php echo $result['sem']?></td>
+	</tr>
 	
 </table>
+<?php if($result['conduction_status'] == 0 && $result['student_count'] == 0 && $result['updated_by']==0) {?>
 <div class="lab_slot_update_details">
 	<form class="form">
 		<div class="row">
@@ -82,7 +92,7 @@ ini_set('display_errors', 1);
 			</div>
 			<div class="col-md-4 form-group">
 				<label class="help-block">Incharge Faculty</label>
-				<input type="text" id="faculty" class="form-control" placeholder="Faculty Initial (ex: prof.ABC)" title="Faculty Initial (ex: prof.ABC)" />
+				<input type="text" id="faculty" class="form-control" placeholder="Faculty Initial (ex: prof.ABC)" title="Faculty Initial (ex: prof.ABC)" /> 
 			</div>
 			<div class="col-md-4 form-group">
 				<label class="help-block"></label>
@@ -92,3 +102,33 @@ ini_set('display_errors', 1);
 	</form>
 	<div class="clearfix"></div>
 </div>
+<?php }else{ ?>
+<div class="lab_slot_update_details">
+	<form class="form">
+		<div class="row">
+			<div class="form-check form-switch col-md-4">
+				<h3 class="text-success">Data Already Updated</h3>
+				 <label class="form-check-label" for="mySwitch"><s>Mark As NOT Conducted</s></label>
+			  <input class="form-check-input" type="checkbox" id="mySwitch" name="darkmode" disabled/>
+			 	<input type="hidden" class="form-control" id="lab_id" value="<?php echo $result['allocationid'];?>">
+			</div>
+			
+		</div>
+		<div class="row">
+			<div class="col-md-4 form-group">
+				<label class="help-block">Student Count (Present Count)</label>
+				<input type="text" id="st_count" class="form-control" placeholder="No of Students present for the Lab" title="No of Students present for the Lab" value="<?php echo $result['student_count']?>" disabled/>
+			</div>
+			<div class="col-md-4 form-group">
+				<label class="help-block">Incharge Faculty</label>
+				<input type="text" id="faculty" class="form-control" placeholder="Faculty Initial (ex: prof.ABC)" title="Faculty Initial (ex: prof.ABC)" value="<?php echo $result['faculty_details']?>" disabled/> 
+			</div>
+			<div class="col-md-4 form-group">
+				<label class="help-block"></label>
+				<button class="btn btn-success" type="button" id="update_lab_conduction" disabled> <i class="fa fa-check"></i> Update</button>
+			</div>
+		</div>
+	</form>
+	<div class="clearfix"></div>
+</div>
+<?php }?>

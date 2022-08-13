@@ -29,7 +29,7 @@ include('pages/required/tables.php');
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Computer Center | Lab Allocation Chart</title>
+  <title>Computer Center | Dept Allocation Chart</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <!-- Bootstrap 3.3.6 -->
@@ -265,7 +265,7 @@ include('pages/required/tables.php');
 			  </a>
 			</li>
 			<?php if($login_query_result['uid'] == 3){?>
-			<li class="active">
+			<li>
 			  <a href="my_lab_slots.php">
 				<i class="fa fa-cubes"></i> <span>My Lab Slots</span>
 				<span class="pull-right-container">
@@ -275,7 +275,7 @@ include('pages/required/tables.php');
 			</li>
 			<?php }
 				if($login_query_result['uid'] == 2){?>
-				<li>
+				<li class="active">
 			  <a href="dept_lab_slots.php">
 				<i class="fa fa-cubes"></i> <span>Dept Lab Slots</span>
 				<span class="pull-right-container">
@@ -312,8 +312,7 @@ include('pages/required/tables.php');
 				<!-- ************************************The Page Content has to be Added Here **********************************************-->
 
 				<div class="row">
-					<div class="col-md-12">
-							<div class="box box-solid">
+					<div class="box box-solid col-md-12">
             <div class="box-header with-border">
               <h3 class="box-title">Indicators</h3>
             </div>
@@ -336,9 +335,7 @@ include('pages/required/tables.php');
                 </ul>
               </div>
                </div>
-            </div>	
-					</div>
-					
+            </div>
 	        <!-- /.col -->
 	        <div class="col-md-12 " id="calender_div">
 	          <div class="box box-primary" >
@@ -500,7 +497,7 @@ $(function() {
         m = date.getMonth(),
         y = date.getFullYear();
     var lab_id_choosen = $('#lab_list').val();
-    var calender_content_url = "lab_calender_events.php";
+    var calender_content_url = "dept_calender_events.php";
     //alert(lab_id_choosen+'=>'+calender_content_url);
     $('#calendar').fullCalendar({
       header: {
