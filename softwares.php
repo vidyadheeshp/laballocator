@@ -29,7 +29,7 @@ include('pages/required/tables.php');
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Computer Center | Dept Allocation Chart</title>
+  <title>Computer Center | Allocation Chart</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <!-- Bootstrap 3.3.6 -->
@@ -274,7 +274,7 @@ include('pages/required/tables.php');
 			  </a>
 			</li>
 			<?php }
-			 if($login_query_result['uid'] == 3){?>
+			if($login_query_result['uid'] == 3){?>
 			<li>
 			  <a href="my_lab_slots.php">
 				<i class="fa fa-cubes"></i> <span>My Lab Slots</span>
@@ -284,8 +284,9 @@ include('pages/required/tables.php');
 			  </a>
 			</li>
 			<?php }
+				
 				if($login_query_result['uid'] == 2){?>
-				<li class="active">
+				<li>
 			  <a href="dept_lab_slots.php">
 				<i class="fa fa-cubes"></i> <span>Dept Lab Slots</span>
 				<span class="pull-right-container">
@@ -304,12 +305,12 @@ include('pages/required/tables.php');
 	<!--use the below section for adding content header-->
     <section class="content-header">
       <h1>
-        Lab Allocation Chart
+       Softwares Available
         <!--small>Control panel</small-->
       </h1>
       <ol class="breadcrumb">
         <li class=""> Home</li>
-        <li class="active"> Allocation Chart</li>
+        <li class="active"> Software List</li>
       </ol>
     </section>
 
@@ -322,77 +323,7 @@ include('pages/required/tables.php');
 				<!-- ************************************The Page Content has to be Added Here **********************************************-->
 
 				<div class="row">
-					<div class="box box-solid col-md-12">
-            <div class="box-header with-border">
-              <h3 class="box-title">Indicators</h3>
-            </div>
-            <div class="box-body">
-						 <div class="btn-group" style="width: 100%; margin-bottom: 10px;">
-                <!--<button type="button" id="color-chooser-btn" class="btn btn-info btn-block dropdown-toggle" data-toggle="dropdown">Color <span class="caret"></span></button>-->
-                <ul class="fc-color-picker" id="">
-                  <li><a style="color: #F3940B;" href="#"><i class="fa fa-square"></i> Aero</a>  </li>
-                  <li><a style="color: #F7E505;" href="#"><i class="fa fa-square"></i> Arch</a> </li>
-                  <li><a style="color: #AAF705;" href="#"><i class="fa fa-square"></i> Civil</a> </li>
-                  <li><a style="color: #02C4F9;" href="#"><i class="fa fa-square"></i> CSE</a>  </li>
-                  <li><a style="color: #B105F7;" href="#"><i class="fa fa-square"></i> EEE</a> </li>
-                  <li><a style="color: #4F0A52;" href="#"><i class="fa fa-square"></i> ECE</a> </li>
-                  <li><a style="color: #0A5250;" href="#"><i class="fa fa-square"></i> First Year</a> </li>
-                  <li><a style="color: #DE104B;" href="#"><i class="fa fa-square"></i> ISE</a> </li>
-                  <li><a style="color: #7E956C;" href="#"><i class="fa fa-square"></i> MBA</a> </li>
-                  <li><a style="color: #58B9FC;" href="#"><i class="fa fa-square"></i> MCA</a> </li>
-                  <li><a style="color: #030FFE;" href="#"><i class="fa fa-square"></i> MECH</a> </li>
-                  <li><a style="color: #FEFE02;" href="#"><i class="fa fa-square"></i> Others</a> </li>
-                </ul>
-              </div>
-               </div>
-            </div>
-	        <!-- /.col -->
-	        <div class="col-md-12 " id="calender_div">
-	          <div class="box box-primary" >
-               <div class="box-body no-padding">
-                 <!-- THE CALENDAR -->
-                 <div id="calendar"></div>
-               </div>
-               <!-- /.box-body -->
-             </div>
-             <!-- /. box -->
-	          
-	        </div>
-	        <!-- /.col -->
-
-	        	<!-- /.modal -->
-				<!--Modal for viewing the slot allocated-->
-				<div class="modal fade" id="view_slot_alloted" role="dialog">
-					<div class="modal-dialog modal-lg">
-						<div class="modal-content">
-							<div class="modal-header bg-primary">
-								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-									<span aria-hidden="true">&times;</span></button>
-								<h4 class="modal-title"><i class="fa fa-book"></i> 
-									Slot Alloted Data
-								
-								</h4>
-							</div>
-							<div class="modal-body">
-								<div class="slot_slloted_data">
-									<div id="loading_image" style="display:none;"></div>
-									<!--button class="btn btn-warning view_booking_details hidden">View Details</button>
-									<input type="hidden" id="booking_id" value=""/-->
-									
-								</div>
-							</div>
-							<div class="modal-footer">
-								<button type="button" class="btn btn-default pull-right btn-flat" data-dismiss="modal">Close</button>
-							</div>
-						</div>
-					<!-- /.modal-content -->
-					</div>
-				  <!-- /.modal-dialog -->
-				</div>
-				<!-- /.modal Close for Viewing the alloted slot data-->
-
-	      </div>
-	      <!-- /.row -->
+	        
 
 
 			  <!-- /.row (main row) -->
@@ -507,7 +438,7 @@ $(function() {
         m = date.getMonth(),
         y = date.getFullYear();
     var lab_id_choosen = $('#lab_list').val();
-    var calender_content_url = "dept_calender_events.php";
+    var calender_content_url = "calender_events.php";
     //alert(lab_id_choosen+'=>'+calender_content_url);
     $('#calendar').fullCalendar({
       header: {

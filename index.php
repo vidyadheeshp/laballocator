@@ -1,14 +1,17 @@
-<?php ini_set('display_errors', 1);
- 
-	if (session_id() == '') {
+<?php 
+ini_set('display_errors', 1);
+
+  
+ 	if (session_id() == '') {
     session_start();
 	$login_id = $_SESSION['s_id'];
 	//$dept_id = $_SESSION['dept'];
 }
 
- if(!isset($_SESSION['logged_in'])) {
+if(!isset($_SESSION['logged_in'])) {
       header("Location: login.php"); 
- }  
+ } 
+
 include('pages/required/db_connection.php');
 include('pages/required/functions.php');
 include('pages/required/tables.php');
@@ -265,7 +268,17 @@ include('pages/required/tables.php');
 				</span>
 			  </a>
 			</li>
-			<?php if($login_query_result['uid'] ==3){?>
+			<?php if($login_query_result['uid'] == 1){ ?>
+			<li>
+			  <a href="softwares.php">
+				<i class="fa fa-cubes"></i> <span>Software List</span>
+				<span class="pull-right-container">
+				  <i class="fa fa-angle-right pull-right"></i>
+				</span>
+			  </a>
+			</li>
+			<?php }
+			 if($login_query_result['uid'] ==3){?>
 			<li>
 			  <a href="my_lab_slots.php">
 				<i class="fa fa-cubes"></i> <span>My Lab Slots</span>
@@ -585,19 +598,26 @@ include('pages/required/tables.php');
 							<div class="inner">
 							 <?php 
 							 $query_to_check_requisitions_open = "SELECT *,
-			           																												DATE_FORMAT(from_date,'%d %M %Y') AS frm_date,
-			           																												DATE_FORMAT(to_date,'%d %M %Y') AS t_date
-			           																									  FROM 
-			           																									  	academic_year 
-			           																									  WHERE 
-			           																									  1=1
-			           																									  ORDER BY id DESC 
-			           																									  LIMIT 1";
+																			DATE_FORMAT(from_date,'%d %M %Y') AS frm_date,
+																			DATE_FORMAT(to_date,'%d %M %Y') AS t_date
+																  FROM 
+																	academic_year 
+																  WHERE 
+																  1=1
+																  ORDER BY id DESC 
+																  LIMIT 1";
 			           								$result_from_query = db_one($query_to_check_requisitions_open);
-			           								
-			           								$exploded_year = explode('-',$result_from_query['aca_year']);
-			           								$check_year_boolean = in_array(date('Y'),$exploded_year);
-							?>
+			           								//print_r($result_from_query)
+													if(empty($result_from_query)){
+														$requisition_flag = 0; //Academic Year is available to choose.
+														$req_form = 0;
+													}else{
+														$requisition_flag = 1; // No Academic Years added.
+														$req_form = $result_from_query['status'];
+				
+													}
+													//echo $requisition_flag;
+							?>				
 							  <h3><?php //echo($Resolutions_count['res_count']); ?></h3>
 
 							  <p>Requisition Form</p>
@@ -605,7 +625,7 @@ include('pages/required/tables.php');
 							<div class="icon">
 							  <i class="fa fa-pencil"></i>
 							</div>
-							<button type="button" class="small-box-footer form-control" id="add_res" <?php echo  (($result_from_query['status']==0 && $start_date_to_number < $current_date_time  &&  $TO_date_to_number < $current_date_time )? 'disabled' :'');?> data-toggle="modal" data-target="#add_res_modal">Add <i class="fa fa-plus"></i></button>
+							<button type="button" class="small-box-footer form-control" id="add_res" <?php echo  (($req_form==0 || $requisition_flag == 0)? 'disabled' :'');?> data-toggle="modal" data-target="#add_res_modal">Add <i class="fa fa-plus"></i></button>
 								<div class="modal fade" id="add_res_modal" role="dialog">
 									  <div class="modal-dialog modal-lg">
 										<div class="modal-content">
@@ -636,15 +656,17 @@ include('pages/required/tables.php');
 																		<div class="form-group col-md-4">
 																			<label class="help-block">Semester : <span class="text-danger">*</span></label>
 																			<select id="sem" required name="sem" class="form-control">
-																				<option val="0">Choose One</option>
-																				<option val="3">3</option>
-																				<option val="4">4</option>
-																				<option val="5">5</option>
-																				<option val="6">6</option>
-																				<option val="7">7</option>
-																				<option val="8">8</option>
-																				<option val="9">9</option>
-																				<option val="10">10</option>
+																				<option value="0">Choose One</option>
+																				<option value="1">1</option>
+																				<option value="2">2</option>
+																				<option value="3">3</option>
+																				<option value="4">4</option>
+																				<option value="5">5</option>
+																				<option value="6">6</option>
+																				<option value="7">7</option>
+																				<option value="8">8</option>
+																				<option value="9">9</option>
+																				<option value="10">10</option>
 																			</select>
 																		</div>
 																		
@@ -1011,9 +1033,9 @@ $(document).ready(function(){
 				contentType: false,
 				success: function(data) {
 					$('.requisition_added_notification').html(data);
-					/*setTimeout(function () {
+					setTimeout(function () {
 							window.location.reload();
-						}, 2000);*/
+						}, 2000);
 				}
 			});
 		/*$.post(
