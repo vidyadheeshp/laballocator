@@ -32,10 +32,14 @@ $week=["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
     $fetch_lab_slots=db_all("select * from slot_list where duration=3");
       
     //Allocate CS BYOD classes
-   $insert_csebyod="null, 'CSEBYOD','CSE Class Room',5,6,2,120,0,3,$academic_year,0";
-   db_insert(1,"courses",$insert_csebyod);
-    $csebyod=db_all("select * from courses where coursecode='CSEBYOD' and academicyear=$academic_year and allocation_status=0");
-    
+
+   
+    $csebyod=db_all("select * from courses where coursecode='CSEBYOD' and academicyear=$academic_year");
+     if(count($csebyod)==0){
+        $insert_csebyod="null, 'CSEBYOD','CSE Class Room',5,6,2,120,0,3,$academic_year,0";
+        db_insert(1,"courses",$insert_csebyod);
+        $csebyod=db_all("select * from courses where coursecode='CSEBYOD' and academicyear=$academic_year and allocation_status=0");
+     }
     if(count($csebyod)!=0){
         $cid=$csebyod[0]['cid'];
         $week=["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
@@ -596,7 +600,7 @@ $week=["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
     
    //lab allocation for BE higher semesters and Masters
  
-    $query_sems=db_all("select *, count(*) as no_of_courses from courses where deptid!=7 and coursecode!='CSEBYOD' and academicyear=$academic_year and allocation_status=0 group by deptid,sem order by divisions desc,strength desc");
+    $query_sems=db_all("select *, count(*) as no_of_courses from courses where deptid!=7 and coursecode!='CSEBYOD' and academicyear=$academic_year and allocation_status=0 group by deptid,sem,divisions,duration order by divisions desc,strength desc");
     foreach($query_sems as $sem)
     {
         $semno=$sem['sem'];
@@ -604,6 +608,7 @@ $week=["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
         $no_of_courses=$sem['no_of_courses'];
         $no_divisions=$sem['divisions'];
         $query_courses=db_all("select * from courses where sem=$semno and deptid=$deptid and allocation_status=0 and academicyear=$academic_year");
+        
         if($no_divisions==1 && $sem['strength']>60){
             $no_batches=2;
             $lab_capacity=$sem['strength']/2;
@@ -619,7 +624,7 @@ $week=["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
         }
         //check if the number of batches are less than courses to allocate
         //if courses are more than divisions, allocate courses on different days
-        if(count($query_courses)>$no_batches){
+        if($no_of_courses>$no_batches){
             //if single division then allocate each of the course of different days
             if($no_batches==1){
                 $labs=array();
@@ -773,15 +778,16 @@ $week=["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
                     }
                         
                     $query_labs=db_all("select * from `labs` where deptid=$dept and labid not in (1,10, 11,13, 16)");
-                    for($l=0;$l<count($query_labs);$l++){
-                        $labs[$c][$l]=$query_labs[$l]['labid'];
+                    for($j=0;$j<count($query_labs);$j++){
+                        $labs[$c][$l++]=$query_labs[$j]['labid'];
                     }
                     
                     $query_labs=db_all("select * from `labs` where deptid!=$dept and no_of_systems>=$lab_capacity and labid not in (1, 10, 11, 13, 16) order by no_of_systems");
-                    for($l=0;$l<count($query_labs);$l++){
-                        $labs[$c][$l]=$query_labs[$l]['labid'];
+                    for($j=0;$j<count($query_labs);$j++){
+                        $labs[$c][$l++]=$query_labs[$j]['labid'];
                     }
-                   
+                    echo "<br/> 789 $cid[$c] $no_batches $no_of_courses labs=";
+                    print_r($labs[$c]);
                         
                     if($c==0){
                         for($l=0;$l<count($labs[0]);$l++){
@@ -815,8 +821,10 @@ $week=["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
                         }
                     
                     }
+                    echo "825=";
+                    print_r($allocate_lab);
                 }
-              
+                
                 $slot=substr($lab_slots_to_allocate[0],strlen($lab_slots_to_allocate[0])-1);
                 $get_lab_slots=db_all("select * from slot_list where slot_id=$slot");  
                 $ld=0;
@@ -980,23 +988,27 @@ $week=["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
             $lab_free_slots=array();
             $cid=array();
             $lab_slots_to_allocate=array();
+            
             for($c=0;$c<$no_of_courses;$c++)
             {
                 $labs[$c]=array();
                 $cid[$c]=$query_courses[$c]['cid'];
+               
                 $query_labs=db_all("select * from `labs`,lab_software_requirements where software_id=".$query_courses[$c]['softwarereq'] ." and labs.labid=lab_software_requirements.labid and labs.labid not in (1,10, 11,13, 16)");
                 for($l=0;$l<count($query_labs);$l++){
                     $labs[$c][$l]=$query_labs[$l]['labid'];
                 }
+                
                 $query_labs=db_all("select * from `labs` where deptid=$dept and labid not in (1,10, 11,13, 16)");
                 for($j=0;$j<count($query_labs);$j++){
                     $labs[$c][$l++]=$query_labs[$j]['labid'];
                 }
+               
                 $query_labs=db_all("select * from `labs` where deptid!=$dept and no_of_systems>=$lab_capacity and labid not in (1, 10, 11, 13, 16) order by no_of_systems");
-                for($l=0;$l<count($query_labs);$l++){
-                    $labs[$c][$l]=$query_labs[$l]['labid'];
+                for($j=0;$j<count($query_labs);$j++){
+                    $labs[$c][$l++]=$query_labs[$j]['labid'];
                 }
-                
+               
                 if($c==0){
                     for($l=0;$l<count($labs[0]);$l++)
                     {
@@ -1029,8 +1041,10 @@ $week=["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
                     }
              
                 }
+                     
             }
-           
+           echo "<br/>allocate labs=";
+           print_r($allocate_lab);
             $slot=substr($lab_slots_to_allocate[0],strlen($lab_slots_to_allocate[0])-1);
             $get_lab_slots=db_all("select * from slot_list where slot_id=$slot");  
           

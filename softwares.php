@@ -323,9 +323,90 @@ include('pages/required/tables.php');
 				<!-- ************************************The Page Content has to be Added Here **********************************************-->
 
 				<div class="row">
-	        
+					<div class="col-md-12">
+						<div class="box box-solid">
+	            <div class="box-header with-border">
+	              <h3 class="box-title">Labs List</h3>
+	            </div>
+	            <div class="box-body">
+							 
+	            </div>
+            </div>	
+					</div>
 
+	        <div class="col-md-12">
+						<div class="box box-solid">
+	            <div class="box-header with-border">
+	              <h3 class="box-title">Softwares List</h3>
+	            </div>
+	            <div class="box-body">
+							 			<table class="table table-bordered table-responsive">
+															<thead>
+																	<tr>
+																		<th>Sl.No</th>
+																		<th>Lab</th>
+																		<th>Software</th>																		<th>Actions</th>
+																	</tr>
+															</thead>
+															<tbody>
+															<?php 
+																$i=1;
+																		$soft_list = "SELECT lsr.labid, l.labname
+						           															  FROM software_requirements sr 
+						           															  		INNER JOIN lab_software_requirements lsr on lsr.software_id = sr.id
+						           															  		INNER JOIN labs l ON l.labid = lsr.labid
+						           															  WHERE 
+						           															  	1=1
+						           															  	GROUP BY lsr.labid
+						           															  	ORDER BY lsr.labid
+						           															  	";
+						            				$soft_list_result = db_all($soft_list);
+						            				$aca_str = '';
+						            				if(empty($soft_list_result)){
+						            					$aca_str .= "<tr>
+																							<td colspan='3'>No recent Academic Year (Closed)</td>
+																						</tr>";
+																					}else{
+																								foreach($soft_list_result AS $soft_li){
 
+																									$inner_query = "SELECT software_id, software_req 
+																																	FROM lab_software_requirements lsr
+																																		INNER JOIN software_requirements sr ON sr.id=lsr.software_id
+																																	WHERE 1=1 AND lsr.labid=".$soft_li['labid'];
+																									$inner_query_result = db_all($inner_query);
+
+														            				$aca_str .= "<tr>
+																															<td>".$i."</td>
+																															<td>".$soft_li['labname']."</td><td>";
+
+																															if(empty($inner_query_result )){
+																																			$aca_str .= "--";
+																																		}else{
+																																			foreach($inner_query_result AS $soft_name){
+																																				$aca_str .= $soft_name['software_req'].",";
+																																			}
+																																			
+																																		}
+																															
+																							
+																												$aca_str .= "</td>
+																															<td><button class='btn btn-warning'><i class='fa fa-edit'></i> Edit</button></td>
+																														</tr>";
+																															$i++;	
+														            						}
+
+																			}
+						            		
+						            			echo $aca_str;
+						            			?>
+															</tbody>
+																
+										</table>
+	            </div>
+            </div>	
+					</div>
+
+				</div>
 			  <!-- /.row (main row) -->
         </section>
 

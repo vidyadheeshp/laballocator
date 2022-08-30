@@ -5,7 +5,7 @@
 	require('pages/required/functions.php');
 
 	if(isset($_GET['lab_id'])){
-		$query_text = "AND l.labid=".$_GET['lab_id'];
+		$query_text = "AND L.labid=".$_GET['lab_id'];
 	}else{
 		$query_text = '';
 	}
@@ -26,8 +26,8 @@
 			WHERE 
 				la.labid = l.labid and c.cid=la.coursecode */
 	$query="SELECT 
-				LA.allocationid,l.labid,la.date_start,la.date_end,l.labname,c.deptid,C.coursename,C.coursecode,DATE_FORMAT(la.date_start,'%h:%m:%s')AS start_time,DATE_FORMAT(la.date_end,'%h:%m:%s') AS end_time
-			FROM LABS L, laballocations LA, courses C
+				LA.allocationid,L.labid,LA.date_start,LA.date_end,L.labname,C.deptid,C.coursename,C.coursecode,DATE_FORMAT(LA.date_start,'%h:%m:%s')AS start_time,DATE_FORMAT(LA.date_end,'%h:%m:%s') AS end_time
+			FROM labs L, laballocations LA, courses C
 			WHERE L.labid=LA.labid AND C.cid=LA.coursecode ".$query_text;
 
 	//echo $query;
@@ -102,5 +102,6 @@
 			);
 	}
 		//var_dump($data);
+	//echo "Hello";
 	echo json_encode($data,JSON_HEX_TAG);
 ?>
